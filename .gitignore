@@ -1,3 +1,4 @@
 CSV_Data/
 .ipynb_checkpoints
+__pycache__/
 
