@@ -41,8 +41,7 @@ class classifier(nn.ModuleList):
         self.kernel_1=2
         self.kernel_2=4
         self.kernel_3=8
-        self.kernel_4 =10 
-        
+ 
         self.stride = 2
           
         self.embedding = nn.Embedding(self.num_words+1, self.embedding_size)
@@ -50,13 +49,13 @@ class classifier(nn.ModuleList):
         self.conv_1 = nn.Conv1d(self.seq_len, self.out_size, self.kernel_1, self.stride)
         self.conv_2 = nn.Conv1d(self.seq_len, self.out_size, self.kernel_2, self.stride)
         self.conv_3 = nn.Conv1d(self.seq_len, self.out_size, self.kernel_3, self.stride)
-        self.conv_4 = nn.Conv1d(self.seq_len, self.out_size, self.kernel_4, self.stride)
+
 
 
         self.pool_1 = nn.MaxPool1d(self.kernel_1, self.stride)
         self.pool_2 = nn.MaxPool1d(self.kernel_2, self.stride)
         self.pool_3 = nn.MaxPool1d(self.kernel_3, self.stride)
-        self.pool_4 = nn.MaxPool1d(self.kernel_4, self.stride)
+
 
         self.fc = nn.Linear(self.final_len(), 1)
 
@@ -76,12 +75,8 @@ class classifier(nn.ModuleList):
         out_pool_3 = ((out_conv_3 - 1 * (self.kernel_3 - 1) - 1) / self.stride) + 1
         out_pool_3 = math.floor(out_pool_3)
 
-        out_conv_4 = ((self.embedding_size - 1 * (self.kernel_4 - 1) - 1) / self.stride) + 1
-        out_conv_4 = math.floor(out_conv_4)
-        out_pool_4 = ((out_conv_4 - 1 * (self.kernel_4 - 1) - 1) / self.stride) + 1
-        out_pool_4 = math.floor(out_pool_4)
         
-        return (out_pool_1 + out_pool_2 + out_pool_3 + out_pool_4)  * self.out_size
+        return (out_pool_1 + out_pool_2 + out_pool_3 )  * self.out_size
 
     def forward(self, x):
         
@@ -99,11 +94,9 @@ class classifier(nn.ModuleList):
         x3 = torch.relu(x3)
         x3 = self.pool_3(x3)
 
-        x4 = self.conv_4(x)
-        x4 = torch.relu(x4)
-        x4 = self.pool_4(x4)
+
         
-        union = torch.cat((x1, x2, x3, x4), 2)
+        union = torch.cat((x1, x2, x3), 2)
         union= union.reshape(union.size(0), -1)
         out = self.fc(union)
         out = self.dropout(out)
