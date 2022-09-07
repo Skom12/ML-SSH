@@ -1,4 +1,5 @@
 CSV_Data/
 .ipynb_checkpoints
 __pycache__/
-
+Cnn.ipynb
+n-gram_cnn.ipynb
