@@ -30,11 +30,11 @@ class classifier(nn.ModuleList):
     def __init__(self):
         super(classifier, self).__init__()
         self.seq_len = 200
-        self.num_words = 14986772
+        self.num_words = 7584901
 
         
-        self.embedding_size = 32
-        self.out_size = 256
+        self.embedding_size = 64
+        self.out_size = 512
         
         self.dropout = nn.Dropout(0.5)
         

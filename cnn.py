@@ -18,20 +18,16 @@ class classifier(nn.ModuleList):
     def __init__(self):
         super(classifier, self).__init__()
         self.num_words = 7584901
-        self.embedding_size =64
+
+        self.embedding_size =96
         self.seq_len = 200
         self.hidden_dim=128
         
-        self.dropout=nn.Dropout(0.5)
-        self.embeddings=nn.Embedding(self.num_words+1, self.embedding_size)
-        self.flatten=nn.Flatten()
-        
         self.kernel_1=2
         self.kernel_2=4
-
-        
-        
         self.stride = 2
+        
+        self.embeddings=nn.Embedding(self.num_words+1, self.embedding_size)
         
         self.conv1 =nn.Conv1d(self.seq_len, self.hidden_dim, self.kernel_1, self.stride)
         self.conv2 =nn.Conv1d(self.hidden_dim, self.hidden_dim, self.kernel_2, self.stride)
@@ -40,7 +36,10 @@ class classifier(nn.ModuleList):
         self.pool_1 = nn.MaxPool1d(self.kernel_1, self.stride)
         self.pool_2 = nn.MaxPool1d(self.kernel_2, self.stride)
         
-        self.fc1 = nn.Linear(256, 1)
+        self.flatten=nn.Flatten()
+        self.dropout=nn.Dropout(0.5)
+        
+        self.fc1 = nn.Linear(512, 1)
         
 
 
